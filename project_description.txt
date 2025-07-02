@@ -1,0 +1,166 @@
+O projeto que estou trabalhando para o hackaton será nomeado de FastTechFood, um serviço de pedido de comida, será uma API desenvolvida em C# .NET, dividida em microserviços, desenvolvidos utilizando clean architecture e microserviços. 
+Sendo assim dividindo em blocos de microserviços temos a 'API Gateway' fazendo interface com o bloco de autenticação utilizando um banco de dados SQL Server.
+O bloco de Autenticação (com usuário e cliente, os dois tendo o seu próprio dominio), fazendo interface com os microserviços 'CARDÁPIO', 'COZINHA' e 'PEDIDOS'. 
+Para autenticação o usuário estára na página inicial e seguirá os passos abaixo, dependendo de cada cenário, com cadastro e/ou login caso já seja um usuário existente:
+
+- Classe 'cliente' (com as propriedades: id, email, cpf, senha_hash, nome, telefone): está pode ser uma classe
+
+AUTENTICAÇÃO - > ACESSA -> SQL Server: Gerencia o ciclo de vida dos usuários (funcionários e clientes):
+										- cadastro
+										- login (emissão/validação de tokens - JWT).
+										Cada tipo de usuário terá um domínio distinto (Funcionario e Cliente).
+
+Para autenticação de usuário (Cliente) existem 3 cenários que serão listados abaixo:
+1º) Cenário: Login de Cliente com E-MAIL válido
+	- está na tela de login;
+	- informa e-mail "cliente@email.com";
+	- informa senha;
+	- clica em entrar;
+	- o sistema autentica com sucesso;
+	- redireciona para tela principal de produtos.
+
+2º) Cenário: Login de Cliente com CPF válido
+	- está na tela de login;
+	- informa CPF "123.456.789-00";
+	- informa senha;
+	- clica em entrar;
+	- o sistema autentica com sucesso;
+	- redireciona para tela principal de produtos.
+
+3º) Cenário: Login de Cliente com credenciais inválidas
+	- está na tela de login;
+	- informa CPF "123.456.789-00" ou email "cliente@email.com";
+	- informa senha;
+	- clica em entrar;
+	- Então o sistema deve exibir a mensagem "E-mail/CPF ou senha inválidos"
+	- E o cliente deve permanecer na tela de login
+	
+Logo em seguida, caso o usuário (Cliente) for autenticado, seguirá para a página de produtos como dito acima (microserviço CARDÁPIO).
+
+CARDAPIO - > ACESSA - > PostgreSQL: Gerenciar os itens do cardápio (nome, descrição, preço, disponibilidade, tipo de refeição). Permite que o gerente cadastre e edite produtos.
+ 
+Classe 'produto' dentro do microserviço 'CARDAPIO', possui estas propriedades (id, nome, descricao, preco, disponibilidade, tipo_refeicao, url_imagem)
+
+Para o cliente buscar um produto no cardapio existem dois cenários para a busca do produto:
+
+1º) Cenário: Buscar Produtos por Nome
+	- Dado que o cliente está na tela de busca de produtos
+	- E existem os produtos "Pizza Calabresa" e "Pizza Frango" no cardápio
+	- Quando o cliente digita "Pizza" na barra de busca
+	- Então o sistema deve exibir "Pizza Calabresa"
+	- E o sistema deve exibir "Pizza Frango"
+	- E não deve exibir outros produtos
+
+2º) Cenário: Filtrar Produtos por Tipo de Refeição
+	- Dado que o cliente está na tela de busca de produtos
+	- E o cardápio contém "Hambúrguer Artesanal (Lanche)", "Água Mineral (Bebida)" e "Bolo de Chocolate (Sobremesa)"
+	- Quando o cliente seleciona o filtro "Lanche"
+	- Então o sistema deve exibir "Hambúrguer Artesanal"
+	- E não deve exibir "Água Mineral" nem "Bolo de Chocolate"
+
+Após a busca por produtos, o cliente irá fazer um pedido, já no microservico 'PEDIDOS', teremos duas classes: 
+
+ItemPedido (id, pedido_id, produto_id, nome_produto, preco_unitario, qtde, obs)
+pedido (cliente_id, data_hora_pedido, status, total_valor, forma_entrega, endereco_entrega, justificativa_cancelamento)
+
+PEDIDOS - > ACESSA -> SQL Server: Gerencia o ciclo de vida dos pedidos do cliente, desde a criação, montagem do pedido, cálculo total, escolha da forma de entrega (balcão, drive-thru, delivery) até o cancelamento (com justificativa, antes do preparo)
+
+duas situações: 
+1) Realização de Pedido (Cliente)
+   1.1) Cenário: Montar e Finalizar Pedido Simples
+		- Dado que o cliente está logado e na tela de produtos
+		- E ele adiciona "Hambúrguer Clássico" ao carrinho
+		- E ele adiciona "Refrigerante Cola" ao carrinho
+		- Quando ele visualiza o carrinho
+		- Então o total do pedido deve ser calculado corretamente (ex: R$ 25,00 + R$ 9,50 = R$ 34,50)
+		- Quando ele seleciona a forma de entrega "Balcão"
+		- E ele confirma o pedido
+		- Então o pedido deve ser registrado no sistema
+		- E o cliente deve ver uma confirmação de pedido com um número identificador
+   1.2) Cenário: Cancelar Pedido Antes do Preparo
+		- Dado que o cliente fez um pedido com o número "P12345"
+		- E o status do pedido "P12345" é "Pendente" (preparo não iniciado)
+		- Quando o cliente solicita o cancelamento do pedido "P12345"
+		- E ele informa a justificativa "Mudei de ideia"
+		- Então o sistema deve cancelar o pedido "P12345"
+		- E o cliente deve receber uma confirmação de cancelamento
+
+2) Acompanhamento de Status (Cliente)
+   2.1) Cenário: Visualizar Status do Pedido
+		- Dado que o cliente está logado
+		- E ele fez um pedido com o número "P98765"
+		- E o status atual do pedido "P98765" é "Em Preparo"
+		- Quando o cliente acessa a tela de "Meus Pedidos"
+		- E seleciona o pedido "P98765"
+		- Então ele deve visualizar o status "Em Preparo" para o pedido "P98765"
+   2.2) Cenário: Receber Notificação de Pedido Pronto
+		- Dado que o cliente fez um pedido com o número "P11223"
+		- E o status do pedido "P11223" muda de "Em Preparo" para "Pronto para Retirada" (pela cozinha)
+		- Quando o sistema envia uma notificação
+		- Então o cliente deve receber uma notificação informando "Seu pedido P11223 está pronto para retirada!"
+
+Após enviar um pedido, o microservico 'COZINHA' terá a função de: Recebe e processa as notificações de novos pedidos. Permite que a equipe da cozinha visualize, aceite ou recuse pedidos.
+ - pedido_id
+ - cliente
+ - cozinha_resposta (aceite ou recusa)
+ - status
+
+COZINHA - > ACESSA - > MongoDB
+
+Classe 'OrdemCozinha' com as propriedades: (id, pedido_id, status_preparo, data_hora_aceite, data_hota_pronto)
+
+para o microserviço cozinha, estas são as situações: 
+
+1) Aceite ou Rejeição de Pedidos (Cozinha)
+   1.1) Cenário: Aceitar um Pedido para Preparo
+		- Dado que a equipe da cozinha está visualizando a lista de pedidos pendentes
+		- E existe um novo pedido "P54321" na lista
+		- Quando a equipe da cozinha clica em "Aceitar" para o pedido "P54321"
+		- Então o status do pedido "P54321" deve mudar para "Em Preparo"
+		- E o cliente deve ser notificado sobre a aceitação do pedido
+   1.2) Cenário: Recusar um Pedido
+		- Dado que a equipe da cozinha está visualizando a lista de pedidos pendentes
+		- E existe um novo pedido "P67890" na lista
+		- Quando a equipe da cozinha clica em "Recusar" para o pedido "P67890"
+		- Então o status do pedido "P67890" deve mudar para "Recusado"
+		- E o cliente deve ser notificado sobre a recusa do pedido
+		- E o motivo da recusa (se houver) deve ser registrado para futuras análises
+
+
+a API terá um serviço de mensageria com RabbitMQ, com as três funções: 
+	- Pedido Criado → Notificação para Cozinha
+	- Pedido Aceito/Rejeitado pela Cozinha → Notificação para Cliente
+	- Status do Pedido Atualizado → Notificação para Cliente
+
+agora segue um RESUMO E FUNÇÃO DE CADA MICROSERVIÇO COM AS RESPECTIVAS CLASSES E SUAS PROPRIEDADES
+
+1) AUTENTICAÇÃO->SQLServer
+Gerencia o ciclo de vida dos usuários (funcionários e clientes):
+cadastro
+login (emissão/validação de tokens - JWT).
+Cada tipo de usuário terá um domínio distinto (Funcionario e Cliente).
+
+Classes:
+1.1) Funcionario (id,email,senha_hash,cargo,nome,ativo)
+1.2) Cliente (id,email,cpf,senha_hash,nome,telefone)
+_______________________________________________________
+2) CARDAPIO->PostgreSQL
+Gerenciar os itens do cardápio (nome, descrição, preço, disponibilidade, tipo de refeição).
+Permite que o gerente cadastre e edite produtos.
+
+Classes:
+2.1)Produto (id,nome,descricao,preco,disponibilidade,tipo_refeicao,url_imagem)
+_______________________________________________________
+3) PEDIDOS->SQLServer
+Gerencia o ciclo de vida dos pedidos do cliente, desde a criação, montagem do pedido, cálculo total, escolha da forma de entrega (balcão, drive-thru, delivery) até o cancelamento (com justificativa, antes do preparo)
+
+Classes:
+3.1)Pedido (cliente_id,data_hora_pedido,status,total_valor,forma_entrega,endereco_entrega,justificativa_cancelamento)
+3.2)ItemPedido (id,pedido_id,produto_id,nome_produto,preco_unitario,qtde,obs)
+_______________________________________________________
+4) COZINHA->MongoDB
+Recebe e processa as notificações de novos pedidos. Permite que a equipe da cozinha visualize, aceite ou recuse pedidos.
+(pedido_id,cliente,cozinha_resposta (aceite ou recusa),status)
+
+Classes:
+4.1) OrdemCozinha (id,pedido_id,status_preparo,data_hora_aceite,data_hora_pronto)
