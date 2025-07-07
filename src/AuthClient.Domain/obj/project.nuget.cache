@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "dgSpecHash": "HvcrTtPpumU=",
+  "success": true,
+  "projectFilePath": "D:\\AuthClient\\src\\AuthClient.Domain\\AuthClient.Domain.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\Gianfranco\\.nuget\\packages\\bcrypt.net-next\\4.0.2\\bcrypt.net-next.4.0.2.nupkg.sha512"
+  ],
+  "logs": []
+}
