@@ -1,0 +1,13 @@
+D:\AuthClient\src\AuthClient.Domain\bin\Debug\net8.0\AuthClient.Domain.deps.json
+D:\AuthClient\src\AuthClient.Domain\bin\Debug\net8.0\AuthClient.Domain.dll
+D:\AuthClient\src\AuthClient.Domain\bin\Debug\net8.0\AuthClient.Domain.pdb
+D:\AuthClient\src\AuthClient.Domain\obj\Debug\net8.0\AuthClient.Domain.csproj.AssemblyReference.cache
+D:\AuthClient\src\AuthClient.Domain\obj\Debug\net8.0\AuthClient.Domain.GeneratedMSBuildEditorConfig.editorconfig
+D:\AuthClient\src\AuthClient.Domain\obj\Debug\net8.0\AuthClient.Domain.AssemblyInfoInputs.cache
+D:\AuthClient\src\AuthClient.Domain\obj\Debug\net8.0\AuthClient.Domain.AssemblyInfo.cs
+D:\AuthClient\src\AuthClient.Domain\obj\Debug\net8.0\AuthClient.Domain.csproj.CoreCompileInputs.cache
+D:\AuthClient\src\AuthClient.Domain\obj\Debug\net8.0\AuthClient.Domain.sourcelink.json
+D:\AuthClient\src\AuthClient.Domain\obj\Debug\net8.0\AuthClient.Domain.dll
+D:\AuthClient\src\AuthClient.Domain\obj\Debug\net8.0\refint\AuthClient.Domain.dll
+D:\AuthClient\src\AuthClient.Domain\obj\Debug\net8.0\AuthClient.Domain.pdb
+D:\AuthClient\src\AuthClient.Domain\obj\Debug\net8.0\ref\AuthClient.Domain.dll

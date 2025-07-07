@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<!-- Aponta para .NET 8 -->
+		<TargetFramework>net8.0</TargetFramework>
+		<Nullable>enable</Nullable>
+		<ImplicitUsings>enable</ImplicitUsings>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<!-- Necessário apenas se a camada de domínio gerar/verificar hash de senha -->
+		<PackageReference Include="BCrypt.Net-Next" Version="4.0.2" />
+	</ItemGroup>
+</Project>

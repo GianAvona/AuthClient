@@ -1,0 +1,6 @@
+D:\AuthClient\src\AuthClient.Application\obj\Debug\net7.0\AuthClient.Application.csproj.AssemblyReference.cache
+D:\AuthClient\src\AuthClient.Application\obj\Debug\net7.0\AuthClient.Application.GeneratedMSBuildEditorConfig.editorconfig
+D:\AuthClient\src\AuthClient.Application\obj\Debug\net7.0\AuthClient.Application.AssemblyInfoInputs.cache
+D:\AuthClient\src\AuthClient.Application\obj\Debug\net7.0\AuthClient.Application.AssemblyInfo.cs
+D:\AuthClient\src\AuthClient.Application\obj\Debug\net7.0\AuthClient.Application.csproj.CoreCompileInputs.cache
+D:\AuthClient\src\AuthClient.Application\obj\Debug\net7.0\AuthClient.Application.sourcelink.json

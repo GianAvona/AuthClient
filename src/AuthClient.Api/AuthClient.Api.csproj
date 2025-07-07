@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+	<PropertyGroup>
+		<!-- Atualizado para .NET 8 -->
+		<TargetFramework>net8.0</TargetFramework>
+		<Nullable>enable</Nullable>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<GenerateDocumentationFile>true</GenerateDocumentationFile>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<!-- FrameworkReference implícito para ASP.NET Core 8 -->
+		<FrameworkReference Include="Microsoft.AspNetCore.App" />
+		<PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
+		<PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="10.0.1" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<!-- Refere Application e Infrastructure -->
+		<ProjectReference Include="..\AuthClient.Application\AuthClient.Application.csproj" />
+		<ProjectReference Include="..\AuthClient.Infrastructure\AuthClient.Infrastructure.csproj" />
+	</ItemGroup>
+</Project>
